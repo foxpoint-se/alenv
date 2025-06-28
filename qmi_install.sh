@@ -16,8 +16,8 @@ SET='\033[0m'
 # Directories
 INS_DIR=/opt/qmi_files                      # New directory
 OLD_DIR=/home/$(whoami)/files/quectel-CM    # Old directory
-UDHCPC_DIR=/etc/udhcpc                      # For RPi OS
-# UDHCPC_DIR=/usr/share/udhcpc              # For Ubuntu OS
+# UDHCPC_DIR=/etc/udhcpc                      # For RPi OS
+UDHCPC_DIR=/usr/share/udhcpc              # For Ubuntu OS
 MOD_DIR=/etc/modules-load.d/modules.conf    # For adding(modprobe) qmi_wwan_q  
 
 # service names
@@ -36,9 +36,9 @@ if [ -d "$INS_DIR" ]; then rm -rf $INS_DIR; fi
 
 # Installations
 echo -e "${YELLOW}Installing kernel headers for Raspberry Pi${SET}"
-apt install raspberrypi-kernel-headers
+# apt install raspberrypi-kernel-headers
 # For ubuntu it should be 
-#apt install linux-headers-$(uname -r)
+apt install linux-headers-$(uname -r)
 
 echo -e "${YELLOW}Installing udhcpc${SET}"
 apt install udhcpc
