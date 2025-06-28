@@ -79,37 +79,6 @@ Follow this guide: https://docs.ros.org/en/humble/Installation/Ubuntu-Install-De
 - If NetworkManager isn't working, temporarily re-enable systemd-networkd: `sudo systemctl enable systemd-networkd && sudo systemctl start systemd-networkd && sudo netplan apply`
 - Check service status: `sudo systemctl status NetworkManager systemd-networkd`
 
-### Configuring 4G modem (Quectel)
-
-1. Install required packages: `sudo apt install modemmanager`
-1. Enable and start ModemManager: `sudo systemctl enable ModemManager && sudo systemctl start ModemManager`
-1. Check modem status: `sudo mmcli -L`
-1. Get modem details: `sudo mmcli -m 0` (replace 0 with modem index from step 3)
-1. Create 4G config: `sudo nano /etc/netplan/98-4g-modem.yaml`
-1. Add configuration:
-   ```yaml
-   network:
-     version: 2
-     modems:
-       wwan0:
-         apn: "internet" # Replace with your carrier's APN, like internet.tele2.se
-         dhcp4: true
-         optional: true
-   ```
-1. Set permissions: `sudo chmod 600 /etc/netplan/98-4g-modem.yaml`
-1. Apply configuration: `sudo netplan generate && sudo netplan apply`
-
-**Common APN settings:**
-
-- Telia (Sweden): `online.telia.se`
-- Telenor (Sweden): `internet`
-- Tele2 (Sweden): `internet.tele2.se`
-- Generic: `internet`
-
-**Troubleshooting:**
-
-- Check modem status: `sudo mmcli -m 0 --simple-status`
-- Check connection: `sudo mmcli -m 0 --3gpp-ussd-status`
 ### Setting up SSH agent forwarding and Git and AWS user forwarding
 
 1. **On your local machine, edit SSH config:**
