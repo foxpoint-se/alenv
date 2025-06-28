@@ -110,4 +110,60 @@ Follow this guide: https://docs.ros.org/en/humble/Installation/Ubuntu-Install-De
 
 - Check modem status: `sudo mmcli -m 0 --simple-status`
 - Check connection: `sudo mmcli -m 0 --3gpp-ussd-status`
-- Monitor network: `sudo networkctl status wwan0`
+### Setting up SSH agent forwarding and Git and AWS user forwarding
+
+1. **On your local machine, edit SSH config:**
+
+   ```bash
+   nano ~/.ssh/config
+   ```
+
+   Add entry for your Pi:
+
+   ```
+   Host rpi
+       HostName 192.168.XX.XXX  # Your Pi's IP
+       User ubuntu
+       ForwardAgent yes
+       SetEnv GIT_AUTHOR_NAME="Your Name"
+       SetEnv GIT_AUTHOR_EMAIL="your.email@example.com"
+       SetEnv GIT_COMMITTER_NAME="Your Name"
+       SetEnv GIT_COMMITTER_EMAIL="your.email@example.com"
+       SendEnv GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL
+   ```
+
+1. **On the Raspberry Pi, configure SSH server:**
+
+   ```bash
+   sudo nano /etc/ssh/sshd_config
+   ```
+
+   Add this line:
+
+   ```
+   AcceptEnv GIT_*
+   AcceptEnv AWS_*
+   ```
+
+1. **Restart SSH service on Pi:**
+
+   ```bash
+   sudo systemctl restart ssh
+   ```
+
+1. **Test the setup:**
+
+   ```bash
+   # On your local machine
+   ssh-add -l
+
+   # SSH to Pi and test
+   ssh rpi
+   ssh-add -l  # Should show your forwarded keys
+   echo $GIT_AUTHOR_NAME  # Should show your name
+   echo $GIT_AUTHOR_EMAIL  # Should show your email
+   ```
+
+1. **Use AWS credentials**
+
+If you're using `aws-vault`, you'll have AWS environment variables active. So make sure to have an AWS vault profile active when SSH:ing into the RPi, if you need to access AWS from there.
