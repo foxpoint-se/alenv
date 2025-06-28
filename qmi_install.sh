@@ -78,7 +78,7 @@ echo -e "${YELLOW}Downloading QMI WWAN Driver for Quectel Module${SET}"
 wget https://github.com/sixfab/Sixfab_QMI_Installer/raw/main/src/Quectel_Linux_Android_QMI_WWAN_Driver_V1.2.1.zip -O qmi_wwan.zip 
 unzip qmi_wwan.zip -d $INS_DIR && rm qmi_wwan.zip
 pushd $INS_DIR/qmi_wwan_q
-make && make install
+CFLAGS="-Wno-error" make && make install
 popd
 
 echo -e "${YELLOW}Downloading Connection Manager${SET}"
@@ -94,7 +94,7 @@ fi
 
 echo -e "${YELLOW}Making $INS_DIR/quectel-CM${SET}"
 pushd $INS_DIR/quectel-CM
-make
+CFLAGS="-Wno-error" make
 popd
 
 if ! (grep -q "qmi_wwan_q" $MOD_DIR ); then
