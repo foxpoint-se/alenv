@@ -7,9 +7,9 @@ fi
 
 echo "Installing modem software from Sixfab"
 
-wget https://raw.githubusercontent.com/sixfab/Sixfab_QMI_Installer/main/qmi_install.sh
+# wget https://raw.githubusercontent.com/sixfab/Sixfab_QMI_Installer/main/qmi_install.sh
 
-chmod +x qmi_install.sh
+# chmod +x qmi_install.sh
 
 ./qmi_install.sh
 
