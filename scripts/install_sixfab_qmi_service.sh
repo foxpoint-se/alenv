@@ -27,18 +27,30 @@ cat > $QMI_SCRIPT <<'EOF'
 #!/bin/bash
 set -e
 
+# This script will:
+# - Wait for the modem and wwan0 interface
+# - Wait for network registration (up to 10 tries, 10s each)
+# - Retry QMI data connection up to 10 times if needed
+#
+# If you want to manually retry, run:
+#   sudo systemctl restart sixfab-qmi.service
+# or
+#   sudo /usr/local/bin/sixfab_qmi_connect.sh <APN>
+
 LOG=/var/log/sixfab_qmi_connect.log
 exec > >(tee -a $LOG) 2>&1
 
-echo "[QMI] --- Starting QMI connection at $(date) ---"
+MAX_RETRIES=10
+RETRY_DELAY=10
 
-# Check for APN argument
 if [[ -z "$1" ]]; then
   echo "[QMI] ERROR: APN argument not provided. Exiting."
   exit 1
 fi
 APN="$1"
 echo "[QMI] Using APN: $APN"
+
+echo "[QMI] --- Starting QMI connection at $(date) ---"
 
 # Wait for modem device to appear
 for i in {1..10}; do
@@ -82,9 +94,37 @@ ip link set wwan0 down || true
 echo 'Y' | tee /sys/class/net/wwan0/qmi/raw_ip
 ip link set wwan0 up
 
-# Start QMI network with provided APN
-echo "[QMI] Starting QMI network with APN: $APN"
-qmicli -p -d /dev/cdc-wdm0 --device-open-net='net-raw-ip|net-no-qos-header' --wds-start-network="apn='$APN',ip-type=4" --client-no-release-cid
+# Wait for network registration (up to MAX_RETRIES)
+for ((try=1; try<=MAX_RETRIES; try++)); do
+    REG_STATE=$(qmicli -d /dev/cdc-wdm0 --nas-get-serving-system 2>/dev/null | grep "Registration state" | grep -Eo 'registered.*$' || true)
+    if [[ "$REG_STATE" == *"registered"* ]]; then
+        echo "[QMI] Modem is registered on the network."
+        break
+    else
+        echo "[QMI] Waiting for network registration... (try $try/$MAX_RETRIES)"
+        sleep $RETRY_DELAY
+    fi
+    if [[ $try -eq $MAX_RETRIES ]]; then
+        echo "[QMI] ERROR: Modem did not register on the network after $MAX_RETRIES tries. Exiting."
+        exit 1
+    fi
+done
+
+# Try to start QMI network (up to MAX_RETRIES)
+for ((try=1; try<=MAX_RETRIES; try++)); do
+    echo "[QMI] Attempting to start QMI network (try $try/$MAX_RETRIES) with APN: $APN"
+    if qmicli -p -d /dev/cdc-wdm0 --device-open-net='net-raw-ip|net-no-qos-header' --wds-start-network="apn='$APN',ip-type=4" --client-no-release-cid; then
+        echo "[QMI] QMI network started successfully."
+        break
+    else
+        echo "[QMI] Failed to start QMI network. Retrying in $RETRY_DELAY seconds..."
+        sleep $RETRY_DELAY
+    fi
+    if [[ $try -eq $MAX_RETRIES ]]; then
+        echo "[QMI] ERROR: Failed to start QMI network after $MAX_RETRIES tries. Exiting."
+        exit 1
+    fi
+done
 
 # Get IP address via udhcpc
 echo "[QMI] Requesting IP address via udhcpc..."
