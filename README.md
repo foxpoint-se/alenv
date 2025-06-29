@@ -94,10 +94,7 @@ Follow this guide: https://docs.ros.org/en/humble/Installation/Ubuntu-Install-De
        HostName 192.168.XX.XXX  # Your Pi's IP
        User ubuntu
        ForwardAgent yes
-       SetEnv GIT_AUTHOR_NAME="Your Name"
-       SetEnv GIT_AUTHOR_EMAIL="your.email@example.com"
-       SetEnv GIT_COMMITTER_NAME="Your Name"
-       SetEnv GIT_COMMITTER_EMAIL="your.email@example.com"
+       SetEnv GIT_AUTHOR_NAME="Your Name" GIT_AUTHOR_EMAIL="your.email@example.com" GIT_COMMITTER_NAME="Your Name" GIT_COMMITTER_EMAIL="your.email@example.com"
        SendEnv GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL
    ```
 
@@ -222,7 +219,7 @@ TODO
 host i-* mi-*
     ProxyCommand sh -c "aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p'"
     IdentityFile ~/.ssh/id_rsa
-    SetEnv GIT_AUTHOR_NAME=<insert git user name> GIT_AUTHOR_EMAIL=<insert git user email> GIT_COMMITTER_NAME=<insert git user name> GIT_COMMITTER_EMAIL=<insert git user email>
+    SetEnv GIT_AUTHOR_NAME="Your Name" GIT_AUTHOR_EMAIL="your.email@example.com" GIT_COMMITTER_NAME="Your Name" GIT_COMMITTER_EMAIL="your.email@example.com"
     SendEnv GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL AWS_VAULT AWS_REGION AWS_DEFAULT_REGION AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_CREDENTIAL_EXPIRATION
     ForwardAgent yes
 ```
@@ -311,10 +308,7 @@ Host eth
     HostName 10.55.55.2  # The static IP you assigned to the Pi's Ethernet interface
     User ubuntu
     ForwardAgent yes
-    SetEnv GIT_AUTHOR_NAME="Your Name"
-    SetEnv GIT_AUTHOR_EMAIL="your.email@example.com"
-    SetEnv GIT_COMMITTER_NAME="Your Name"
-    SetEnv GIT_COMMITTER_EMAIL="your.email@example.com"
+    SetEnv GIT_AUTHOR_NAME="Your Name" GIT_AUTHOR_EMAIL="your.email@example.com" GIT_COMMITTER_NAME="Your Name" GIT_COMMITTER_EMAIL="your.email@example.com"
     SendEnv GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL AWS_VAULT AWS_REGION AWS_DEFAULT_REGION AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_CREDENTIAL_EXPIRATION
 ```
 
