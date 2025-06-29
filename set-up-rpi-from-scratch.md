@@ -150,6 +150,7 @@ sudo ./install_sixfab_qmi_service.sh <APN>
 ```
 
 This script will:
+
 - Install required packages
 - Set up a systemd service to automatically bring up the modem connection at boot
 - Attempt to connect the modem and log status and diagnostics
@@ -205,3 +206,25 @@ sudo udhcpc -q -f -i wwan0
 ```
 
 If you continue to have issues, check the logs and the official guide for more troubleshooting tips.
+
+## Setting up AWS Session Manager
+
+### Setting up the RPi
+
+TODO
+
+### Setting up your computer
+
+**Add this to your `~/.ssh/config`**
+
+```
+# SSH over AWS Systems Manager Session Manager
+host i-* mi-*
+    ProxyCommand sh -c "aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p'"
+    IdentityFile ~/.ssh/id_rsa
+    SetEnv GIT_AUTHOR_NAME=<insert git user name> GIT_AUTHOR_EMAIL=<insert git user email> GIT_COMMITTER_NAME=<insert git user name> GIT_COMMITTER_EMAIL=<insert git user email>
+    SendEnv GIT_AUTHOR_NAME GIT_AUTHOR_EMAIL GIT_COMMITTER_NAME GIT_COMMITTER_EMAIL AWS_VAULT AWS_REGION AWS_DEFAULT_REGION AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_CREDENTIAL_EXPIRATION
+    ForwardAgent yes
+```
+
+And then connect with `ssh ubuntu@mi-XXXYYYZZZ` where `XXXYYYZZZ` is found in AWS Console.
