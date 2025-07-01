@@ -14,12 +14,11 @@ To enable AWS Session Manager on your Raspberry Pi (Ubuntu), follow these steps:
 ### 1. Update and install prerequisites
 ```sh
 sudo apt update
-sudo apt install -y curl unzip
+sudo apt install -y curl unzip jq
 ```
 
 ### 2. Install the AWS SSM Agent
-
-> **Note:** The download URLs below contain the word 'windows', but they are the official, correct links for Linux/Ubuntu ARM as per [AWS documentation](https://docs.aws.amazon.com/systems-manager/latest/userguide/agent-install-deb.html).
+(https://docs.aws.amazon.com/systems-manager/latest/userguide/agent-install-deb.html).
 
 #### For ARM64 (aarch64/arm64):
 ```sh
@@ -40,7 +39,7 @@ sudo systemctl enable amazon-ssm-agent
 sudo systemctl start amazon-ssm-agent
 ```
 
-### 4. (Optional) Install AWS CLI
+### 4. Install AWS CLI
 This is useful for diagnostics and hybrid activation, but not strictly required for the agent to run:
 ```sh
 curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip"
