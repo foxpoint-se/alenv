@@ -75,6 +75,25 @@ Once registered, your Pi will appear as a managed instance in the AWS SSM consol
 
 ## Setting up your computer
 
+To use SSH over AWS Session Manager (with the ProxyCommand in your SSH config), you must install the AWS Session Manager Plugin on your local machine (not the Pi).
+
+### Install the Session Manager Plugin
+
+#### On Linux (x86_64):
+```sh
+curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
+sudo dpkg -i session-manager-plugin.deb
+```
+
+### Verify installation
+```sh
+session-manager-plugin --version
+```
+You should see a version number.
+
+---
+
+### SSH using proxy command
 Add this to your `~/.ssh/config`:
 
 ```
@@ -87,4 +106,4 @@ host i-* mi-*
     ForwardAgent yes
 ```
 
-And then connect with `ssh ubuntu@mi-XXXYYYZZZ` where `XXXYYYZZZ` is found in AWS Console.
+And then connect with `ssh ubuntu@mi-XXXYYYZZZ` where `XXXYYYZZZ` is found in AWS Console, or by using `./scripts/ssm/list-managed.nodes.sh`.
