@@ -73,6 +73,40 @@ Once registered, your Pi will appear as a managed instance in the AWS SSM consol
 
 > For more details, see the [official AWS documentation](https://docs.aws.amazon.com/systems-manager/latest/userguide/agent-install-deb.html).
 
+## Ensuring SSM Agent Waits for Modem (wwan0) Before Starting
+
+If your Pi uses a cellular modem (wwan0) for connectivity, the SSM agent may start before the modem is ready, causing unreliable connections. To fix this, use the provided scripts to ensure the SSM agent only starts after the modem is up and has internet access.
+
+### One-time Setup (Idempotent)
+
+1. Run the setup script:
+    ```sh
+    cd ./scripts/ssm/service-fix/
+    ./setup-ssm-wait-for-wwan.sh
+    ```
+    - This will:
+      - Install/update the `wait-for-wwan.sh` script to `/usr/local/bin/`
+      - Set up a systemd override so the SSM agent waits for the modem
+      - Reload and restart the SSM agent
+    - The script is safe to run multiple times (idempotent).
+
+3. **Reboot and test:**
+    - Disconnect WiFi, reboot, and ensure the SSM agent connects over the modem.
+
+### Viewing Logs
+- The output from `wait-for-wwan.sh` is included in the SSM agent's systemd logs:
+    ```sh
+    sudo journalctl -u amazon-ssm-agent -b
+    ```
+- Look for lines containing `wait-for-wwan.sh` to see the modem wait status.
+
+### Troubleshooting
+- If the SSM agent does not connect, check:
+    - The modem is up and has a route to the internet
+    - The logs above for timeout or error messages
+- You can safely re-run the setup script if you update the scripts or need to re-apply the fix.
+
+
 ## Setting up your computer
 
 To use SSH over AWS Session Manager (with the ProxyCommand in your SSH config), you must install the AWS Session Manager Plugin on your local machine (not the Pi).
@@ -107,3 +141,4 @@ host i-* mi-*
 ```
 
 And then connect with `ssh ubuntu@mi-XXXYYYZZZ` where `XXXYYYZZZ` is found in AWS Console, or by using `./scripts/ssm/list-managed.nodes.sh`.
+
