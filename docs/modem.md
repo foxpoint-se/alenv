@@ -4,11 +4,25 @@
 
 To set up your Sixfab modem (such as the EG25-G Base HAT) on your Raspberry Pi running Ubuntu 22.04 or similar, follow these steps:
 
+## Script Overview and Folder Structure
+
+All Sixfab modem-related scripts are grouped in `scripts/modem/` for clarity and ease of use:
+
+| Script                              | Purpose                                      | When to Use                |
+|------------------------------------- |----------------------------------------------|----------------------------|
+| install_sixfab_qmi_service.sh        | Install/configure modem & systemd service    | Initial setup, reconfigure |
+| sixfab-watchdog.sh                   | Watchdog: monitor & auto-restart modem       | For reliability            |
+| setup-sixfab-watchdog.sh             | Install/uninstall/status for watchdog        | To manage watchdog         |
+
+- **install_sixfab_qmi_service.sh**: Run this first to set up the modem and its systemd service.
+- **sixfab-watchdog.sh** & **setup-sixfab-watchdog.sh**: Use these to install a watchdog that keeps the modem connection alive by monitoring and restarting the service as needed.
+
 ## 1. Use the install script
 
 Run the following command, replacing `<APN>` with your SIM card's APN (for example, `internet.tele2.se`):
 
 ```sh
+cd scripts/modem/
 sudo ./install_sixfab_qmi_service.sh <APN>
 ```
 
@@ -69,3 +83,47 @@ sudo udhcpc -q -f -i wwan0
 ```
 
 If you continue to have issues, check the logs and the official guide for more troubleshooting tips.
+
+## 4. Ensuring Modem Reliability with Sixfab Watchdog
+
+If your robot or Pi may lose modem connectivity for extended periods (e.g., underwater, remote), you can install a watchdog service to automatically monitor and restart the Sixfab modem service as needed. This watchdog will keep checking indefinitely and recover as soon as connectivity returns.
+
+### Install the Watchdog
+
+1. Place the `sixfab-watchdog.sh` and `setup-sixfab-watchdog.sh` scripts in `scripts/modem/`.
+2. Run the setup script:
+   ```sh
+   cd scripts/modem/
+   sudo ./setup-sixfab-watchdog.sh install
+   ```
+   - This will:
+     - Install/update the `sixfab-watchdog.sh` script to `/usr/local/bin/`
+     - Set up a systemd service to run the watchdog on every boot
+     - Start the service immediately
+   - The script is safe to run multiple times (idempotent).
+
+### Check Status and Logs
+- **Service status:**
+  ```sh
+  sudo ./setup-sixfab-watchdog.sh status
+  ```
+- **Recent logs:**
+  ```sh
+  sudo ./setup-sixfab-watchdog.sh logs
+  ```
+- **Follow logs live:**
+  ```sh
+  sudo tail -f /var/log/sixfab-watchdog.log
+  ```
+
+### Uninstall the Watchdog
+To remove the watchdog service:
+```sh
+sudo ./setup-sixfab-watchdog.sh uninstall
+```
+
+### How it works
+- The watchdog checks if `wwan0` is up and can reach the internet.
+- If not, it restarts the Sixfab modem service (`sixfab-qmi.service` by default).
+- All actions are logged to `/var/log/sixfab-watchdog.log`.
+- The service is robust to long outages and will keep retrying until connectivity is restored.
