@@ -106,6 +106,42 @@ If your Pi uses a cellular modem (wwan0) for connectivity, the SSM agent may sta
     - The logs above for timeout or error messages
 - You can safely re-run the setup script if you update the scripts or need to re-apply the fix.
 
+## Ensuring SSM Agent Robustness with Watchdog
+
+If your Pi may lose connectivity for extended periods, install the SSM watchdog service to automatically monitor and restart the SSM agent as needed. The watchdog will keep checking indefinitely and recover as soon as connectivity returns.
+
+### Install the Watchdog
+
+```sh
+cd ./scripts/ssm/service-fix/
+sudo ./setup-ssm-watchdog.sh --status
+```
+- This installs, enables, and starts the watchdog service.
+- The service will run on every boot and continuously monitor SSM connectivity.
+
+### Check Status and Logs
+- **Service status:**
+  ```sh
+  sudo systemctl status ssm-watchdog.service
+  ```
+- **Recent logs:**
+  ```sh
+  sudo ./scripts/ssm/service-fix/setup-ssm-watchdog.sh --logs
+  ```
+- **Follow logs live:**
+  ```sh
+  sudo journalctl -u ssm-watchdog.service -f
+  ```
+
+### Uninstall the Watchdog
+To remove the watchdog service:
+```sh
+sudo systemctl stop ssm-watchdog.service
+sudo systemctl disable ssm-watchdog.service
+sudo rm /usr/local/bin/ssm-watchdog.sh
+sudo rm /etc/systemd/system/ssm-watchdog.service
+sudo systemctl daemon-reload
+```
 
 ## Setting up your computer
 

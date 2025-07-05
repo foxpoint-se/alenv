@@ -1,0 +1,20 @@
+[Unit]
+Description=SSM Agent Watchdog Service
+After=network-online.target
+Wants=network-online.target
+PartOf=amazon-ssm-agent.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/ssm-watchdog.sh
+Restart=always
+RestartSec=10
+User=root
+StandardOutput=journal
+StandardError=journal
+
+# Give the watchdog time to start after network is ready
+ExecStartPre=/bin/sleep 30
+
+[Install]
+WantedBy=multi-user.target 
