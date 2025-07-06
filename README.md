@@ -1,16 +1,22 @@
-# Raspberry Pi Setup Guide
+# Raspberry Pi Cloud-Connected Setup
 
-Welcome! This repository contains step-by-step instructions and scripts for setting up and managing a Raspberry Pi for development, networking, and cloud workflows.
+Welcome! This repository provides a simple, robust way to set up a Raspberry Pi with automatic failover between Wi-Fi and cellular, and reliable remote management via AWS SSM.
 
-## Quick Start: Step-by-Step
+## Quick Start
 
-1. [Install Ubuntu on the Raspberry Pi](docs/setup.md)
-1. [Set up networking and Wi-Fi](docs/networking.md)
-1. [Set up a direct Ethernet connection](docs/ethernet.md)
-1. [Configure SSH, Git, and AWS user forwarding](docs/ssh-git-aws.md)
-1. [Set up a Sixfab/Quectel modem](docs/modem.md)
-1. [Set up AWS Session Manager](docs/aws-session-manager.md)
+1. **Flash Ubuntu and boot your Pi**
+2. **Follow the setup guide:**
+   - [Initial Setup](docs/setup.md)
+   - [Networking & Failover](docs/networking.md)
+   - [Ethernet (optional)](docs/ethernet.md)
+   - [SSH, Git, and AWS](docs/ssh-git-aws.md)
+   - [AWS Session Manager (SSM)](docs/aws-session-manager.md)
 
----
+## Features
+- Automatic, interface-based failover between Wi-Fi and cellular (no QMI/Sixfab scripts)
+- Modern ModemManager/NetworkManager workflow
+- Robust SSM agent watchdog for remote management
+- Modular scripts for easy install/uninstall
 
-Each step links to a subpage with detailed, copy-pasteable instructions.
+## Legacy
+All previous scripts and documentation are archived in the `LEGACY/` folder for reference.

@@ -1,0 +1,42 @@
+#!/bin/bash
+
+WIFI_IF="wlan0"
+CELL_IF="wwan0"
+CHECK_HOST="8.8.8.8"
+PING_COUNT=2
+
+# Only run on connectivity change or up/down events
+if [[ "$2" =~ ^(connectivity-change|up|down)$ ]]; then
+
+    # Helper: get active connection UUID for an interface
+    get_active_conn() {
+        nmcli -g GENERAL.CONNECTION device show "$1" 2>/dev/null
+    }
+
+    # Helper: set never-default for a connection
+    set_never_default() {
+        local conn="$1"
+        local val="$2"
+        if [ -n "$conn" ]; then
+            nmcli connection modify "$conn" ipv4.never-default "$val"
+        fi
+    }
+
+    # Check if Wi-Fi is up and has internet
+    if nmcli device status | grep -q "$WIFI_IF.*connected"; then
+        if ping -I "$WIFI_IF" -c $PING_COUNT -W 2 "$CHECK_HOST" >/dev/null; then
+            # Wi-Fi has internet: ensure cellular is not default
+            CELL_CONN=$(get_active_conn "$CELL_IF")
+            set_never_default "$CELL_CONN" yes
+            nmcli connection up "$CELL_CONN" --no-reapply
+            logger "auto-route: Wi-Fi has internet, using Wi-Fi as default"
+            exit 0
+        fi
+    fi
+
+    # If here, Wi-Fi is down or has no internet: allow cellular as default
+    CELL_CONN=$(get_active_conn "$CELL_IF")
+    set_never_default "$CELL_CONN" no
+    nmcli connection up "$CELL_CONN" --no-reapply
+    logger "auto-route: Wi-Fi down/no internet, using cellular as default"
+fi 

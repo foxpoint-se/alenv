@@ -1,24 +1,22 @@
 [⬅ Back to main README](../README.md)
 
-# Initial Setup & Imaging
+# Initial Setup
 
-## Installing
+1. **Flash Ubuntu 22.04+ to your SD card**
+   - Use the official Raspberry Pi Imager or Balena Etcher.
+   - Insert the SD card and boot your Pi.
 
-Assuming you're on Ubuntu Desktop.
+2. **Login and update**
+   ```sh
+   sudo apt update && sudo apt upgrade -y
+   ```
 
-1. Install rpi-imager: `sudo apt install rpi-imager`.
-1. Run rpi-imager: `rpi-imager`.
-1. Select the inserted SD card.
-1. Select OS: Ubuntu Server 22.04 64-bit (for running ROS2 Humble).
-1. Click the cog wheel:
-1. Set hostname to something suitable.
-1. Enable SSH.
-1. Add your SSH public key.
-1. Configure Wi-Fi:
-1. Wi-Fi country SE.
-1. Wi-Fi SSID and password.
-1. Locale settings.
-1. Insert the SD card into the RPi, boot it, and wait for a couple of minutes.
-1. You should now be able to SSH into the RPi:
-1. Check your Wi-Fi to see if you can see a new device, and get its IP address.
-1. `ssh ubuntu@192.168.XX.XXX`.
+3. **Install core dependencies**
+   ```sh
+   sudo apt install network-manager modemmanager awscli jq tmux
+   ```
+
+4. **(Optional) Enable SSH**
+   - Create an empty file named `ssh` in the boot partition before first boot, or enable via `sudo systemctl enable --now ssh`.
+
+5. **Continue with [Networking & Failover](networking.md)**
