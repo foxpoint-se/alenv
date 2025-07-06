@@ -7,7 +7,6 @@
 multitail \
   -l "sudo journalctl -u amazon-ssm-agent -f | sed 's/^/[SSM-Agent] /'" \
   -l "sudo journalctl -u ssm-watchdog -f | sed 's/^/[SSM-Watchdog] /'" \
-  -l "sudo journalctl -u sixfab-watchdog -f | sed 's/^/[Sixfab-Watchdog] /'" \
   -l "sudo journalctl -u NetworkManager -f | sed 's/^/[NetworkManager] /'" \
   -l "sudo journalctl -u ModemManager -f | sed 's/^/[ModemManager] /'" \
   -l "sudo journalctl -u systemd-timesyncd -f | sed 's/^/[TimeSync] /'" \
