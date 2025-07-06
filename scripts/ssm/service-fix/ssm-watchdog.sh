@@ -67,6 +67,7 @@ check_ssm_connectivity() {
         "Connectivity to ec2messages endpoint"
         "Connectivity to ssmmessages endpoint"
         "Agent service"
+        "AWS Credentials"
     )
     
     for item in "${critical_items[@]}"; do
