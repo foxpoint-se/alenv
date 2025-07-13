@@ -11,6 +11,7 @@ Welcome! This repository provides a simple, robust way to set up a Raspberry Pi 
    - [Ethernet (optional)](docs/ethernet.md)
    - [SSH, Git, and AWS](docs/ssh-git-aws.md)
    - [AWS Session Manager (SSM)](docs/aws-session-manager.md)
+   - [ROS 2 setup](docs/ros2-setup.md)
 
 ## Features
 - Automatic, interface-based failover between Wi-Fi and cellular (no QMI/Sixfab scripts)
