@@ -29,3 +29,16 @@ ros2 run demo_nodes_py listener
 ```
 
 If you see these nodes talking to each other, you're all set!
+
+## ROS2 Control (optional, not requierd for Eel as of yet)
+
+To install ROS2 Control, run:
+
+```bash
+sudo apt install ros-humble-ros2-control ros-humble-ros2-controllers
+```
+
+Remember to `source /opt/ros/humble/setup.bash` again, now that you have new packages.
+
+
+Install xacro: `sudo apt install ros-humble-xacro`
