@@ -4,7 +4,10 @@
 
 ## Following official installation guide
 
-Assuming you want to install ROS2 Humble, follow the steps here: https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html
+Assuming you want to install ROS2 Humble, follow the steps here:
+
+- Humble: https://docs.ros.org/en/humble/Installation/Ubuntu-Install-Debs.html
+- OR Jazzy: https://docs.ros.org/en/jazzy/Installation/Ubuntu-Install-Debs.html
 
 You probably don't need GUI tools, so `ros-humble-ros-base` should be enough. However, you might want to install demo packages, just to verify that everything is working as expected:
 
@@ -39,6 +42,5 @@ sudo apt install ros-humble-ros2-control ros-humble-ros2-controllers
 ```
 
 Remember to `source /opt/ros/humble/setup.bash` again, now that you have new packages.
-
 
 Install xacro: `sudo apt install ros-humble-xacro`

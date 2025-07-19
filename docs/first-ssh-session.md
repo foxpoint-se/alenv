@@ -33,13 +33,37 @@ sudo apt update && sudo apt upgrade -y
 1. Paste your ASCII art here. Save and close.
 1. Log out and in again, to confirm it works.
 
-## Install core dependencies
+## SSH server config on the Pi
 
-On the RPi:
+Edit `/etc/ssh/sshd_config`:
+
+```
+AcceptEnv GIT_*
+AcceptEnv AWS_*
+```
+
+Restart SSH:
 
 ```bash
-sudo apt install network-manager modemmanager awscli jq
+sudo systemctl restart ssh
 ```
+
+## Test the setup
+
+```bash
+# On your local machine
+ssh-add -l
+
+# SSH to Pi and test
+ssh rpi
+ssh-add -l  # Should show your forwarded keys
+echo $GIT_AUTHOR_NAME  # Should show your name
+echo $GIT_AUTHOR_EMAIL  # Should show your email
+```
+
+## Use AWS credentials
+
+If you're using `aws-vault`, you'll have AWS environment variables active. So make sure to have an AWS vault profile active when SSH:ing into the RPi, if you need to access AWS from there.
 
 Go back to start page and find the next step.
 

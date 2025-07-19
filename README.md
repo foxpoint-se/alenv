@@ -8,9 +8,10 @@ Welcome! This repository provides a simple, robust way to set up a Raspberry Pi 
 2. **Follow the setup guide:**
    - [Initial Setup](docs/setup.md)
    - [Setup during first session](docs/first-ssh-session.md)
+   - [SSH, Git, and AWS](docs/ssh-git-aws.md)
+   - [Install dependencies](docs/install-dependencies.md)
    - [Networking & Failover](docs/networking.md)
    - [Ethernet (optional)](docs/ethernet.md)
-   - [SSH, Git, and AWS](docs/ssh-git-aws.md)
    - [AWS Session Manager (SSM)](docs/aws-session-manager.md)
    - [ROS 2 setup](docs/ros2-setup.md)
 
