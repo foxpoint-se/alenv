@@ -30,7 +30,7 @@ sudo apt update && sudo apt upgrade -y
 1. Google for "ascii text generator" and create your ASCII text
 1. Copy that
 1. Edit the "message of the day" with `sudo nano /etc/motd`
-1. Paste your ASCII art here
+1. Paste your ASCII art here. Save and close.
 1. Log out and in again, to confirm it works.
 
 ## Install core dependencies
