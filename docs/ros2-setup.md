@@ -33,7 +33,7 @@ ros2 run demo_nodes_py listener
 
 If you see these nodes talking to each other, you're all set!
 
-## ROS2 Control (optional, not requierd for Eel as of yet)
+## ROS2 Control (optional, not required for Eel as of yet)
 
 To install ROS2 Control, run:
 
