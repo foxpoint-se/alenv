@@ -25,3 +25,7 @@ Welcome! This repository provides a simple, robust way to set up a Raspberry Pi 
 ## Legacy
 
 All previous scripts and documentation are archived in the `LEGACY/` folder for reference.
+
+## TODO
+
+- [ ] How to add public key in authorized keys
